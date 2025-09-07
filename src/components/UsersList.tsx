@@ -1,23 +1,39 @@
-'use client';
+"use client";
+import { useQuery } from "@tanstack/react-query";
+import { gql } from "@apollo/client";
+import { apolloClient } from "../lib/apolloClient";
 
-import { useQuery } from '@tanstack/react-query';
-import { gql } from '@apollo/client';
-import { apolloClient } from '../lib/apolloClient';
+interface Country {
+  code: string;
+  name: string;
+}
+
+interface GetCountriesResponse {
+  countries: Country[];
+}
 
 const GET_COUNTRIES = gql`
-  query ExampleQuery {
+  query GetCountries {
     countries {
       code
+      name
     }
   }
 `;
 
-export default function CountriesList() {
-  const { data, isLoading, error } = useQuery({
-    queryKey: ['countries'],
-    queryFn: async () => {
-      const { data } = await apolloClient.query({ query: GET_COUNTRIES });
-      return data.countries;
+export default function UsersList() {
+  const { data, isLoading, error } = useQuery<GetCountriesResponse>({
+    queryKey: ["countries"],
+    queryFn: async (): Promise<GetCountriesResponse> => {
+      const result = await apolloClient.query<GetCountriesResponse>({
+        query: GET_COUNTRIES,
+      });
+
+      if (!result.data) {
+        throw new Error("No data returned from server");
+      }
+
+      return result.data;
     },
   });
 
@@ -26,8 +42,8 @@ export default function CountriesList() {
 
   return (
     <ul>
-      {data?.map((country: string) => (
-        <li key={country.code}>{country.code}</li>
+      {data?.countries.map((country) => (
+        <li key={country.code}>{country.name}</li>
       ))}
     </ul>
   );
