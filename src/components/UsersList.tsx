@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useQuery } from "@tanstack/react-query";
-import { gql } from "@apollo/client";
-import { apolloClient } from "../lib/apolloClient";
+import { useQuery } from '@tanstack/react-query';
+import { gql } from '@apollo/client';
+import { apolloClient } from '../lib/apolloClient';
 
 const GET_COUNTRIES = gql`
   query ExampleQuery {
@@ -14,7 +14,7 @@ const GET_COUNTRIES = gql`
 
 export default function CountriesList() {
   const { data, isLoading, error } = useQuery({
-    queryKey: ["countries"],
+    queryKey: ['countries'],
     queryFn: async () => {
       const { data } = await apolloClient.query({ query: GET_COUNTRIES });
       return data.countries;
@@ -26,7 +26,7 @@ export default function CountriesList() {
 
   return (
     <ul>
-      {data?.map((country: any) => (
+      {data?.map((country: string) => (
         <li key={country.code}>{country.code}</li>
       ))}
     </ul>

@@ -1,5 +1,4 @@
-import Image from "next/image";
-import UsersList from "../components/UsersList";
+import UsersList from '../components/UsersList';
 
 export default function Home() {
   return (

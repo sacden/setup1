@@ -1,11 +1,11 @@
-"use client";
-import { ReactNode } from "react";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { ApolloProvider } from "@apollo/client/react";
-import { queryClient } from "../lib/react-query";
-import { apolloClient } from "../lib/apolloClient";
-import "./globals.css";
+'use client';
+import { ReactNode } from 'react';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { ApolloProvider } from '@apollo/client/react';
+import { queryClient } from '../lib/react-query';
+import { apolloClient } from '../lib/apolloClient';
+import './globals.css';
 
 interface RootLayoutProps {
   children: ReactNode;
