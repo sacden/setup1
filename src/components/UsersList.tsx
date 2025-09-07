@@ -27,8 +27,7 @@ export default function CountriesList() {
   return (
     <ul>
       {data?.map((country: string) => (
-          <li key={country.code}>{country.code}</li>
-
+        <li key={country.code}>{country.code}</li>
       ))}
     </ul>
   );
