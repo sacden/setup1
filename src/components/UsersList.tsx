@@ -1,7 +1,7 @@
-"use client";
-import { useQuery } from "@tanstack/react-query";
-import { gql } from "@apollo/client";
-import { apolloClient } from "../lib/apolloClient";
+'use client';
+import { useQuery } from '@tanstack/react-query';
+import { gql } from '@apollo/client';
+import { apolloClient } from '../lib/apolloClient';
 
 interface Country {
   code: string;
@@ -23,14 +23,14 @@ const GET_COUNTRIES = gql`
 
 export default function UsersList() {
   const { data, isLoading, error } = useQuery<GetCountriesResponse>({
-    queryKey: ["countries"],
+    queryKey: ['countries'],
     queryFn: async (): Promise<GetCountriesResponse> => {
       const result = await apolloClient.query<GetCountriesResponse>({
         query: GET_COUNTRIES,
       });
 
       if (!result.data) {
-        throw new Error("No data returned from server");
+        throw new Error('No data returned from server');
       }
 
       return result.data;
