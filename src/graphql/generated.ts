@@ -1,5 +1,4 @@
-import { gql } from '@apollo/client';
-import * as Apollo from '@apollo/client';
+import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -11,7 +10,31 @@ export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> =
 export type Incremental<T> =
   | T
   | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
-const defaultOptions = {} as const;
+
+function fetcher<TData, TVariables>(
+  endpoint: string,
+  requestInit: RequestInit,
+  query: string,
+  variables?: TVariables,
+) {
+  return async (): Promise<TData> => {
+    const res = await fetch(endpoint, {
+      method: 'POST',
+      ...requestInit,
+      body: JSON.stringify({ query, variables }),
+    });
+
+    const json = await res.json();
+
+    if (json.errors) {
+      const { message } = json.errors[0];
+
+      throw new Error(message);
+    }
+
+    return json.data;
+  };
+}
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: { input: string; output: string };
@@ -138,64 +161,28 @@ export type GetCountriesQuery = {
   countries: Array<{ __typename?: 'Country'; code: string; name: string }>;
 };
 
-export const GetCountriesDocument = gql`
-  query GetCountries {
-    countries {
-      code
-      name
-    }
+export const GetCountriesDocument = `
+    query GetCountries {
+  countries {
+    code
+    name
   }
-`;
+}
+    `;
 
-/**
- * __useGetCountriesQuery__
- *
- * To run a query within a React component, call `useGetCountriesQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetCountriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetCountriesQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetCountriesQuery(
-  baseOptions?: Apollo.QueryHookOptions<GetCountriesQuery, GetCountriesQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<GetCountriesQuery, GetCountriesQueryVariables>(
-    GetCountriesDocument,
+export const useGetCountriesQuery = <TData = GetCountriesQuery, TError = unknown>(
+  dataSource: { endpoint: string; fetchParams?: RequestInit },
+  variables?: GetCountriesQueryVariables,
+  options?: UseQueryOptions<GetCountriesQuery, TError, TData>,
+) => {
+  return useQuery<GetCountriesQuery, TError, TData>(
+    variables === undefined ? ['GetCountries'] : ['GetCountries', variables],
+    fetcher<GetCountriesQuery, GetCountriesQueryVariables>(
+      dataSource.endpoint,
+      dataSource.fetchParams || {},
+      GetCountriesDocument,
+      variables,
+    ),
     options,
   );
-}
-export function useGetCountriesLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<GetCountriesQuery, GetCountriesQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<GetCountriesQuery, GetCountriesQueryVariables>(
-    GetCountriesDocument,
-    options,
-  );
-}
-export function useGetCountriesSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<GetCountriesQuery, GetCountriesQueryVariables>,
-) {
-  const options =
-    baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<GetCountriesQuery, GetCountriesQueryVariables>(
-    GetCountriesDocument,
-    options,
-  );
-}
-export type GetCountriesQueryHookResult = ReturnType<typeof useGetCountriesQuery>;
-export type GetCountriesLazyQueryHookResult = ReturnType<typeof useGetCountriesLazyQuery>;
-export type GetCountriesSuspenseQueryHookResult = ReturnType<typeof useGetCountriesSuspenseQuery>;
-export type GetCountriesQueryResult = Apollo.QueryResult<
-  GetCountriesQuery,
-  GetCountriesQueryVariables
->;
+};
