@@ -1,5 +1,11 @@
+// eslint.config.cjs
 const tseslint = require('typescript-eslint');
 const js = require('@eslint/js');
+const { FlatCompat } = require('@eslint/eslintrc');
+
+const compat = new FlatCompat({
+  baseDirectory: __dirname,
+});
 
 module.exports = [
   {
@@ -15,8 +21,12 @@ module.exports = [
   },
 
   js.configs.recommended,
-
   ...tseslint.configs.recommended,
+
+  // Добавляем правила Next.js
+  ...compat.config({
+    extends: ['next/core-web-vitals', 'next/typescript'],
+  }),
 
   {
     files: ['**/*.{ts,tsx}'],
@@ -27,39 +37,7 @@ module.exports = [
       parser: tseslint.parser,
       parserOptions: {
         project: './tsconfig.json',
-        ecmaVersion: 2022,
-        sourceType: 'module',
-        ecmaFeatures: {
-          jsx: true,
-        },
       },
-    },
-  },
-
-  {
-    files: ['**/*.{js,jsx}'],
-    rules: {
-      'no-undef': 'off',
-      '@typescript-eslint/no-require-imports': 'off',
-    },
-    languageOptions: {
-      ecmaVersion: 2022,
-      sourceType: 'module',
-      ecmaFeatures: {
-        jsx: true,
-      },
-    },
-  },
-
-  {
-    files: ['*.config.js', '*.config.cjs'],
-    rules: {
-      'no-undef': 'off',
-      '@typescript-eslint/no-require-imports': 'off',
-    },
-    languageOptions: {
-      ecmaVersion: 2022,
-      sourceType: 'commonjs',
     },
   },
 ];
