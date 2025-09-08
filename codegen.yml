@@ -1,6 +1,7 @@
 overwrite: true
 schema: 'https://countries.trevorblades.com/'
-documents: 'src/graphql/**/*.ts'
+documents:
+  - 'src/graphql/**/*.graphql'
 generates:
   src/graphql/generated.ts:
     plugins:
@@ -8,11 +9,6 @@ generates:
       - 'typescript-operations'
       - 'typescript-react-query'
     config:
-      withHooks: true
-      withHOC: false
-      withComponent: false
-      reactApolloVersion: 3
-      skipTypename: false
-      preResolveTypes: true
-      useSuspenseQuery: false
-      useSuspenseFragment: false
+      fetcher: '@/lib/graphqlFetcher#graphqlFetcher'
+      fetcherWantsVariables: true
+      reactQueryVersion: 5

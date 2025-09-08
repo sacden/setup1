@@ -1,4 +1,5 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
+import { graphqlFetcher } from '@/lib/graphqlFetcher';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -10,31 +11,6 @@ export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> =
 export type Incremental<T> =
   | T
   | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
-
-function fetcher<TData, TVariables>(
-  endpoint: string,
-  requestInit: RequestInit,
-  query: string,
-  variables?: TVariables,
-) {
-  return async (): Promise<TData> => {
-    const res = await fetch(endpoint, {
-      method: 'POST',
-      ...requestInit,
-      body: JSON.stringify({ query, variables }),
-    });
-
-    const json = await res.json();
-
-    if (json.errors) {
-      const { message } = json.errors[0];
-
-      throw new Error(message);
-    }
-
-    return json.data;
-  };
-}
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: { input: string; output: string };
@@ -171,18 +147,17 @@ export const GetCountriesDocument = `
     `;
 
 export const useGetCountriesQuery = <TData = GetCountriesQuery, TError = unknown>(
-  dataSource: { endpoint: string; fetchParams?: RequestInit },
   variables?: GetCountriesQueryVariables,
-  options?: UseQueryOptions<GetCountriesQuery, TError, TData>,
+  options?: Omit<UseQueryOptions<GetCountriesQuery, TError, TData>, 'queryKey'> & {
+    queryKey?: UseQueryOptions<GetCountriesQuery, TError, TData>['queryKey'];
+  },
 ) => {
-  return useQuery<GetCountriesQuery, TError, TData>(
-    variables === undefined ? ['GetCountries'] : ['GetCountries', variables],
-    fetcher<GetCountriesQuery, GetCountriesQueryVariables>(
-      dataSource.endpoint,
-      dataSource.fetchParams || {},
+  return useQuery<GetCountriesQuery, TError, TData>({
+    queryKey: variables === undefined ? ['GetCountries'] : ['GetCountries', variables],
+    queryFn: graphqlFetcher<GetCountriesQuery, GetCountriesQueryVariables>(
       GetCountriesDocument,
       variables,
     ),
-    options,
-  );
+    ...options,
+  });
 };
