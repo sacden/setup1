@@ -1,5 +1,5 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
-import { graphqlFetcher } from '@/lib/graphqlFetcher';
+import { graphqlFetcherWrapper } from '../lib/graphqlFetcherWrapper';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -154,7 +154,7 @@ export const useGetCountriesQuery = <TData = GetCountriesQuery, TError = unknown
 ) => {
   return useQuery<GetCountriesQuery, TError, TData>({
     queryKey: variables === undefined ? ['GetCountries'] : ['GetCountries', variables],
-    queryFn: graphqlFetcher<GetCountriesQuery, GetCountriesQueryVariables>(
+    queryFn: graphqlFetcherWrapper<GetCountriesQuery, GetCountriesQueryVariables>(
       GetCountriesDocument,
       variables,
     ),
