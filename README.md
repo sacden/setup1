@@ -1,36 +1,81 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Setup1 — Next.js 15 + React 19 + TypeScript + Tailwind Project
 
-## Getting Started
+This is a **starter project** using **Next.js 15.5**, **React 19**, **TypeScript**, and **TailwindCSS**.  
+It provides a **basic project setup** ready for development with modern technologies, including:
 
-First, run the development server:
+- Next.js 15 with Turbopack
+- TypeScript support
+- TailwindCSS for styling
+- React Query (tanstack/react-query) for data fetching and caching
+- GraphQL integration
+- GraphQL Code Generator for automatic TypeScript types and React Query hooks
+- ESLint and Prettier for code quality
+- Husky for git hooks
+
+---
+
+## Quick Start
+
+1. **Clone the repository**
+
+```bash
+git clone <your-repo-url>
+cd setup1
+```
+
+2. **Install dependencies**
+
+```bash
+npm install
+```
+
+3. **Generate TypeScript types and hooks from GraphQL queries**
+
+```bash
+npx graphql-codegen
+```
+
+4. **Build the project for production**
+
+```bash
+npm run build
+```
+
+5. **Start the production server**
+
+```bash
+npm run start
+```
+
+6. **Optional: Run the development server**
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Available Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Command            | Description                          |
+| ------------------ | ------------------------------------ |
+| `npm run dev`      | Starts Next.js development server    |
+| `npm run build`    | Builds project for production        |
+| `npm run start`    | Starts production server             |
+| `npm run lint`     | Lints project using ESLint           |
+| `npm run lint:fix` | Lints and automatically fixes issues |
+| `npm run format`   | Formats project using Prettier       |
+| `npm run prepare`  | Installs Husky git hooks             |
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## Purpose
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+This project serves as a **base template** for starting new Next.js + React projects with TypeScript and TailwindCSS.  
+It comes fully configured with essential tooling for development, linting, formatting, building, and includes **GraphQL + React Query setup** so you can focus on implementing features rather than boilerplate.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## License
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT © Denis Sachmajev
